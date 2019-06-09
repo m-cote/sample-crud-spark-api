@@ -1,9 +1,9 @@
 package app.controller;
 
 import app.model.User;
+import app.util.RequestUtil;
 import app.util.ValidationUtil;
 import app.util.json.JsonUtil;
-import app.util.RequestUtil;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,19 +17,19 @@ import static app.util.RequestUtil.clientAcceptsJson;
 public class UsersController {
     private static final Logger log = LoggerFactory.getLogger(UsersController.class);
 
-    public static String getAll(Request request, Response response) {
+    public static Object getAll(Request request, Response response) {
 
         log.info("getAll");
 
         if (clientAcceptsJson(request)) {
             response.type("application/json");
-            return JsonUtil.writeValue(usersRepository.findAll());
+            return usersRepository.findAll();
         }
         response.status(HttpStatus.NOT_ACCEPTABLE_406);
         return "";
     }
 
-    public static String getOne(Request request, Response response) {
+    public static Object getOne(Request request, Response response) {
 
         long userId = RequestUtil.getParamUserId(request);
         log.info("getOne with id {}", userId);
@@ -38,13 +38,13 @@ public class UsersController {
             response.type("application/json");
 
             User user = usersRepository.findOne(userId);
-            return JsonUtil.writeValue(user);
+            return user;
         }
         response.status(HttpStatus.NOT_ACCEPTABLE_406);
         return "";
     }
 
-    public static String create(Request request, Response response) {
+    public static Object create(Request request, Response response) {
 
         User user = JsonUtil.readValue(request.body(), User.class);
         log.info("create {}", user);
@@ -55,7 +55,7 @@ public class UsersController {
             ValidationUtil.checkIsNew(user);
             User saved = usersRepository.save(user);
             response.status(HttpStatus.CREATED_201);
-            return JsonUtil.writeValue(saved);
+            return saved;
         }
         response.status(HttpStatus.NOT_ACCEPTABLE_406);
         return "";
