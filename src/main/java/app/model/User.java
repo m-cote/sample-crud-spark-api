@@ -1,30 +1,31 @@
 package app.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
 @ToString
-public class User extends BaseEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "users")
+public class User extends BaseEntity{
 
-    private Settings settings;
-    private Map<String, String> attributes;
+    @NotBlank
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
 
-    public User() {
-        this(new Settings());
-    }
+/*
+    @JsonIgnore
+    private List<UserAttribute> attributes;
+*/
 
-    public User(Settings settings) {
-        this(settings, new HashMap<>());
-    }
-
-    public User(Settings settings, Map<String, String> attributes) {
-        this.settings = settings;
-        this.attributes = attributes;
-    }
 }
+

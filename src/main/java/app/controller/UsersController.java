@@ -10,8 +10,7 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
-import static app.Application.usersRepository;
-import static app.util.RequestUtil.clientAcceptsJson;
+import static app.Application.usersDAO;
 
 
 public class UsersController {
@@ -20,28 +19,16 @@ public class UsersController {
     public static Object getAll(Request request, Response response) {
 
         log.info("getAll");
-
-        if (clientAcceptsJson(request)) {
-            response.type("application/json");
-            return usersRepository.findAll();
-        }
-        response.status(HttpStatus.NOT_ACCEPTABLE_406);
-        return "";
+        return usersDAO.findAll();
     }
 
     public static Object getOne(Request request, Response response) {
 
-        long userId = RequestUtil.getParamUserId(request);
+        int userId = RequestUtil.getParamUserId(request);
         log.info("getOne with id {}", userId);
 
-        if (clientAcceptsJson(request)) {
-            response.type("application/json");
-
-            User user = usersRepository.findOne(userId);
-            return user;
-        }
-        response.status(HttpStatus.NOT_ACCEPTABLE_406);
-        return "";
+        User user = usersDAO.findOne(userId);
+        return user;
     }
 
     public static Object create(Request request, Response response) {
@@ -49,36 +36,31 @@ public class UsersController {
         User user = JsonUtil.readValue(request.body(), User.class);
         log.info("create {}", user);
 
-        if (clientAcceptsJson(request)) {
-            response.type("application/json");
 
-            ValidationUtil.checkIsNew(user);
-            User saved = usersRepository.save(user);
-            response.status(HttpStatus.CREATED_201);
-            return saved;
-        }
-        response.status(HttpStatus.NOT_ACCEPTABLE_406);
-        return "";
+        ValidationUtil.checkIsNew(user);
+        User saved = usersDAO.save(user);
+        response.status(HttpStatus.CREATED_201);
+        return saved;
     }
 
     public static String update(Request request, Response response) {
         User user = JsonUtil.readValue(request.body(), User.class);
-        long userId = RequestUtil.getParamUserId(request);
+        int userId = RequestUtil.getParamUserId(request);
 
         log.info("update {} with id {}", user, userId);
 
         ValidationUtil.assureIdConsistency(user, userId);
-        usersRepository.save(user);
+        usersDAO.save(user);
         response.status(HttpStatus.NO_CONTENT_204);
         return "";
     }
 
     public static String delete(Request request, Response response) {
 
-        long userId = RequestUtil.getParamUserId(request);
+        int userId = RequestUtil.getParamUserId(request);
         log.info("delete with id {}", userId);
 
-        usersRepository.delete(userId);
+        usersDAO.delete(userId);
         response.status(HttpStatus.NO_CONTENT_204);
         return "";
     }

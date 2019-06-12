@@ -4,13 +4,14 @@ import app.model.User;
 
 import java.util.List;
 
-public interface UsersRepository {
+public interface UsersDAO {
 
     List<User> findAll();
 
-    User findOne(long id);
+    User findOne(int id);
 
     User save(User user);
 
-    void delete(long id);
+    void delete(int id);
+
 }

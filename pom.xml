@@ -13,6 +13,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <jackson-json.version>2.9.9</jackson-json.version>
+        <hibernate.version>5.4.3.Final</hibernate.version>
+        <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
     </properties>
 
     <build>
@@ -55,19 +57,24 @@
             <artifactId>jackson-databind</artifactId>
             <version>${jackson-json.version}</version>
         </dependency>
-<!--
+
         <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.47</version>
         </dependency>
--->
-<!--
+
         <dependency>
-            <groupId>javax.ws.rs</groupId>
-            <artifactId>javax.ws.rs-api</artifactId>
-            <version>2.1.1</version>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
         </dependency>
--->
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate.validator.version}</version>
+        </dependency>
+
     </dependencies>
 
 </project>

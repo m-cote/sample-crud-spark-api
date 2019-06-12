@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class MockUsersRepositoryImpl implements UsersRepository{
+public class MockUsersDAOImpl implements UsersDAO {
 
-    private static AtomicLong counter = new AtomicLong(0);
+    private static AtomicInteger counter = new AtomicInteger(0);
 
-    Map<Long, User> map = new ConcurrentHashMap<>();
+    Map<Integer, User> map = new ConcurrentHashMap<>();
 
     @Override
     public List<User> findAll() {
@@ -20,7 +20,7 @@ public class MockUsersRepositoryImpl implements UsersRepository{
     }
 
     @Override
-    public User findOne(long id) {
+    public User findOne(int id) {
         return map.get(id);
     }
 
@@ -35,7 +35,7 @@ public class MockUsersRepositoryImpl implements UsersRepository{
     }
 
     @Override
-    public void delete(long id) {
+    public void delete(int id) {
         map.remove(id);
     }
 }
