@@ -8,25 +8,27 @@ import app.util.json.JsonUtil;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
+import java.util.List;
+
+@Component
 public class UsersController {
     private final Logger log = LoggerFactory.getLogger(UsersController.class);
 
+    @Autowired
     private UsersDAO usersDAO;
 
-    public UsersController(UsersDAO usersDAO) {
-        this.usersDAO = usersDAO;
-    }
-
-    public Object getAll(Request request, Response response) {
+    public List<User> getAll(Request request, Response response) {
 
         log.info("getAll");
         return usersDAO.findAll();
     }
 
-    public Object getOne(Request request, Response response) {
+    public User getOne(Request request, Response response) {
 
         int userId = RequestUtil.getParamUserId(request);
         log.info("getOne with id {}", userId);
@@ -34,7 +36,7 @@ public class UsersController {
         return usersDAO.findOne(userId);
     }
 
-    public Object create(Request request, Response response) {
+    public User create(Request request, Response response) {
 
         User user = JsonUtil.readValue(request.body(), User.class);
         log.info("create {}", user);

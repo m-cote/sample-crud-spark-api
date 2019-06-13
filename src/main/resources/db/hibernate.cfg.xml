@@ -10,13 +10,17 @@
         <property name="show_sql">true</property>
         <property name="connection.pool_size">10</property>
 
-        <!-- Database Connection Settings -->
+<!--
+        &lt;!&ndash; Database Connection Settings &ndash;&gt;
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/scsa</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/scsa?createDatabaseIfNotExist=true</property>
         <property name="hibernate.connection.username">user</property>
         <property name="hibernate.connection.password">password</property>
+-->
 
-        <!-- Mapping With Model Class Containing Annotations -->
+<!--
+        &lt;!&ndash; Mapping With Model Class Containing Annotations &ndash;&gt;
         <mapping class="app.model.User"></mapping>
+-->
     </session-factory>
 </hibernate-configuration>
