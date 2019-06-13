@@ -7,9 +7,9 @@ import spark.Request;
 import spark.Response;
 
 public class UserSettingsController {
-    private static final Logger log = LoggerFactory.getLogger(UserSettingsController.class);
+    private final Logger log = LoggerFactory.getLogger(UserSettingsController.class);
 
-    public static Object getOne(Request request, Response response) {
+    public Object getOne(Request request, Response response) {
         int userId = RequestUtil.getParamUserId(request);
         log.info("getOne with id {}", userId);
 

@@ -11,8 +11,6 @@ import static spark.Spark.*;
 
 public class Application {
 
-    public static UsersDAO usersDAO;
-
     private static ResponseTransformer jsonTransformer = new JsonTransformer();
 
     public static void main(String[] args) {
@@ -22,8 +20,8 @@ public class Application {
         usersDAO.save(new User("Ivan", "", new UserSettings(true,false), null));
         usersDAO.save(new User("Sidor", "", new UserSettings(true,false), null));
 */
-        usersDAO = new UsersDAOImpl();
-
+        UsersController usersController = new UsersController(new UsersDAOImpl());
+//        UserSettingsController userSettingsController = new UserSettingsController()
 
         port(8080);
 
@@ -31,13 +29,13 @@ public class Application {
 
         path("/api", () -> {
             path("/users", () -> {
-                get("", UsersController::getAll, jsonTransformer);
-                get("/:userId", UsersController::getOne, jsonTransformer);
-                post("", "application/json", UsersController::create, jsonTransformer);
-                put("/:userId", "application/json", UsersController::update);
-                delete("/:userId", UsersController::delete);
+                get("", usersController::getAll, jsonTransformer);
+                get("/:userId", usersController::getOne, jsonTransformer);
+                post("", "application/json", usersController::create, jsonTransformer);
+                put("/:userId", "application/json", usersController::update);
+                delete("/:userId", usersController::delete);
 
-                get("/:userId/settings", UserSettingsController::getOne, jsonTransformer);
+                //get("/:userId/settings", UserSettingsController::getOne, jsonTransformer);
             });
         });
     }

@@ -12,7 +12,7 @@ import java.util.function.Function;
 
 public abstract class DaoJpa {
 
-    private static final Logger log = LoggerFactory.getLogger(DaoJpa.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected void setTransactionReadOnly(EntityManager entityManager) {
         Session session = entityManager.unwrap(Session.class);

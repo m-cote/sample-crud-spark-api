@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.dao.UsersDAO;
 import app.model.User;
 import app.util.RequestUtil;
 import app.util.ValidationUtil;
@@ -10,28 +11,30 @@ import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
-import static app.Application.usersDAO;
-
-
 public class UsersController {
-    private static final Logger log = LoggerFactory.getLogger(UsersController.class);
+    private final Logger log = LoggerFactory.getLogger(UsersController.class);
 
-    public static Object getAll(Request request, Response response) {
+    private UsersDAO usersDAO;
+
+    public UsersController(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
+    }
+
+    public Object getAll(Request request, Response response) {
 
         log.info("getAll");
         return usersDAO.findAll();
     }
 
-    public static Object getOne(Request request, Response response) {
+    public Object getOne(Request request, Response response) {
 
         int userId = RequestUtil.getParamUserId(request);
         log.info("getOne with id {}", userId);
 
-        User user = usersDAO.findOne(userId);
-        return user;
+        return usersDAO.findOne(userId);
     }
 
-    public static Object create(Request request, Response response) {
+    public Object create(Request request, Response response) {
 
         User user = JsonUtil.readValue(request.body(), User.class);
         log.info("create {}", user);
@@ -43,7 +46,7 @@ public class UsersController {
         return saved;
     }
 
-    public static String update(Request request, Response response) {
+    public String update(Request request, Response response) {
         User user = JsonUtil.readValue(request.body(), User.class);
         int userId = RequestUtil.getParamUserId(request);
 
@@ -55,7 +58,7 @@ public class UsersController {
         return "";
     }
 
-    public static String delete(Request request, Response response) {
+    public String delete(Request request, Response response) {
 
         int userId = RequestUtil.getParamUserId(request);
         log.info("delete with id {}", userId);
