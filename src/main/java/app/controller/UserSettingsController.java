@@ -11,7 +11,7 @@ public class UserSettingsController {
     private final Logger log = LoggerFactory.getLogger(UserSettingsController.class);
 
     public UserSettings getOne(Request request, Response response) {
-        int userId = RequestUtil.getParamUserId(request);
+        int userId = RequestUtil.getParamUserId(request, log);
         log.info("getOne with id {}", userId);
 
         return null;

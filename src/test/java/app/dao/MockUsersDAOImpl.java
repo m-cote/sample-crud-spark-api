@@ -35,7 +35,7 @@ public class MockUsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    public void delete(int id) {
-        map.remove(id);
+    public boolean delete(int id) {
+        return map.remove(id) != null;
     }
 }

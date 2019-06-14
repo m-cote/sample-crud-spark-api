@@ -12,6 +12,6 @@ public interface UsersDAO {
 
     User save(User user);
 
-    void delete(int id);
+    boolean delete(int id);
 
 }

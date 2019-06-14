@@ -39,12 +39,11 @@ public class UsersDAOImpl implements UsersDAO {
 
     @Override
     @Transactional
-    public void delete(int id) {
+    public boolean delete(int id) {
 
-        em.createQuery("DELETE FROM User u WHERE u.id=:id")
+        return em.createQuery("DELETE FROM User u WHERE u.id=:id")
                 .setParameter("id", id)
-                .executeUpdate();
-
+                .executeUpdate() > 0;
     }
 
 }
