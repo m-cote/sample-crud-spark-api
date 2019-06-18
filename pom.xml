@@ -22,6 +22,7 @@
         <javax-el.version>3.0.1-b11</javax-el.version>
         <spring.version>5.1.7.RELEASE</spring.version>
         <rest-assured.version>4.0.0</rest-assured.version>
+        <assertj.version>3.12.2</assertj.version>
     </properties>
 
     <build>
@@ -113,6 +114,12 @@
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
             <scope>test</scope>
         </dependency>
 

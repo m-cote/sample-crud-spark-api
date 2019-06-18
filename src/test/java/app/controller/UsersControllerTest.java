@@ -5,7 +5,6 @@ import io.restassured.RestAssured.*;
 import io.restassured.http.ContentType;
 import io.restassured.matcher.RestAssuredMatchers.*;
 import org.eclipse.jetty.http.HttpStatus;
-import org.hamcrest.Matchers.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +13,7 @@ import java.util.List;
 import static app.config.WebConfig.API_URL;
 import static app.config.WebConfig.USERS_URL;
 import static app.dao.UserTestData.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
@@ -25,9 +25,9 @@ public class UsersControllerTest extends AbstractTest {
     class NormalBehaviour {
 
         @Test
-        void getShouldReturnUsers() {
+        void getShouldReturnAllUsers() throws Exception {
 
-            List<User> users =
+            List<User> actual =
                     when()
                             .get(USERS_PATH)
                             .then()
@@ -36,10 +36,9 @@ public class UsersControllerTest extends AbstractTest {
                             .extract()
                             .body()
                             .jsonPath()
-                            .getList(".");
+                            .getList(".", User.class);
 
-//            org.hamcrest.Matchers.
-
+            assertThat(actual).usingFieldByFieldElementComparator().isEqualTo(USERS);
         }
 
         @Test
