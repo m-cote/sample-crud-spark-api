@@ -1,16 +1,31 @@
 package app.config;
 
 import app.controller.UsersController;
+import app.dao.UsersDAO;
+import app.dao.UsersDAOImpl;
 import app.util.json.JsonTransformer;
+import lombok.Getter;
+import lombok.Setter;
 
 import static spark.Spark.*;
 
+@Getter
+@Setter
 public class WebConfig {
 
+    public static final String API_URL = "/api";
+    public static final String USERS_URL = "/users";
+
+    private UsersDAO usersDAO;
     private UsersController usersController;
 
-    public WebConfig(UsersController usersController) {
-        this.usersController = usersController;
+    public void init() {
+        if (usersDAO == null) {
+            usersDAO = new UsersDAOImpl();
+        }
+        if (usersController == null) {
+            usersController = new UsersController(usersDAO);
+        }
         setupRoutes();
     }
 
@@ -22,8 +37,8 @@ public class WebConfig {
 
         defaultResponseTransformer(new JsonTransformer());
 
-        path("/api", () -> {
-            path("/users", () -> {
+        path(API_URL, () -> {
+            path(USERS_URL, () -> {
                 get("", usersController::getAll);
                 get("/:userId", usersController::getOne);
                 post("", "application/json", usersController::create);

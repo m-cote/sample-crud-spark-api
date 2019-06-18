@@ -1,8 +1,6 @@
 package app.model;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,6 +9,8 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @ToString
 @Entity
 @Table(name = "users")
@@ -21,15 +21,6 @@ public class User extends BaseEntity{
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
-
-    public User(Integer id, @NotBlank String firstName, String lastName) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-    }
-
-    public User() {
-    }
 
 /*
     @JsonIgnore

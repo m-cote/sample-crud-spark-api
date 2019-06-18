@@ -11,21 +11,21 @@ import app.util.json.JsonPayloadParser;
 import org.eclipse.jetty.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import spark.Request;
 import spark.Response;
 
 import java.util.List;
 
-@Component
 public class UsersController {
     private final Logger log = LoggerFactory.getLogger(UsersController.class);
 
     private final JsonPayloadParser<User> jsonPayloadParser = new JsonPayloadParser<>(User.class);
 
-    @Autowired
     private UsersDAO usersDAO;
+
+    public UsersController(UsersDAO usersDAO) {
+        this.usersDAO = usersDAO;
+    }
 
     public List<User> getAll(Request request, Response response) {
 

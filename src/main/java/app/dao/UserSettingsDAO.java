@@ -8,6 +8,6 @@ public interface UserSettingsDAO {
 
     UserSettings save(UserSettings settings);
 
-    void delete(int id);
+    boolean delete(int id);
 
 }

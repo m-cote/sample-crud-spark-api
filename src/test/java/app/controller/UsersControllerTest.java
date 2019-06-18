@@ -1,6 +1,5 @@
 package app.controller;
 
-import app.Application;
 import app.config.WebConfig;
 import app.model.User;
 import io.restassured.RestAssured.*;
@@ -12,25 +11,22 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.List;
 
+import static app.config.WebConfig.API_URL;
+import static app.config.WebConfig.USERS_URL;
 import static app.dao.UserTestData.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 
-//@Sql(scripts = "classpath:db/populateDb.sql", config = @SqlConfig(encoding = "UTF-8"))
 public class UsersControllerTest {
 
-    private static final String USERS_PATH = "/api/users";
+    private final String USERS_PATH = API_URL + USERS_URL;
 
     @BeforeAll
     static void init() {
 
-        AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(Application.class);
-        new WebConfig(ctx.getBean(UsersController.class));
-        ctx.registerShutdownHook();
 
     }
 
