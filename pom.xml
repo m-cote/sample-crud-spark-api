@@ -21,6 +21,7 @@
         <slf4j.version>1.7.21</slf4j.version>
         <javax-el.version>3.0.1-b11</javax-el.version>
         <spring.version>5.1.7.RELEASE</spring.version>
+        <rest-assured.version>4.0.0</rest-assured.version>
     </properties>
 
     <build>
@@ -119,6 +120,12 @@
         </dependency>
 
         <!-- Testing -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+            <scope>test</scope>
+        </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
