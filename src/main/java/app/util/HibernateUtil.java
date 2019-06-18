@@ -45,24 +45,14 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    public static void executeSql(URL sqlScriptUrl) {
+    public static void executeSql(String sql) {
 
         try (Session session = getSessionFactory().openSession()) {
-
-            String sqlScript;
-            try {
-                sqlScript = IOUtils.toString(sqlScriptUrl.openStream());
-            } catch (IOException e) {
-                final String message = "Reading script \"" + sqlScriptUrl + "\" failed: " + e;
-                System.err.println(message);
-                throw new RuntimeException(message);
-            }
-
             session.doWork(new Work() {
                 @Override
                 public void execute(Connection connection) throws SQLException {
                     Statement statement = connection.createStatement();
-                    for (String sqlStatement : sqlScript.split(";")) {
+                    for (String sqlStatement : sql.split(";")) {
                         if (StringUtils.isNotBlank(sqlStatement)) {
                             statement.addBatch(sqlStatement);
                         }
@@ -71,7 +61,6 @@ public class HibernateUtil {
                 }
             });
         }
-
     }
 
 }
