@@ -8,9 +8,8 @@ public class Application {
 
     public static void main(String[] args) {
 
-        WebConfig webConfig = new WebConfig();
+        new WebConfig().init();
         HibernateUtil.executeSql(FileHelper.extractResourceContent("db/populateDb.sql"));
-        webConfig.init();
 
     }
 

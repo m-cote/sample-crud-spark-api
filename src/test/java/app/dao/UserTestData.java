@@ -5,6 +5,9 @@ import com.sun.tools.javac.util.List;
 
 public class UserTestData {
 
+    private UserTestData() {
+    }
+
     public static final Integer id1 = 1;
     public static final Integer id2 = 2;
     public static final Integer id3 = 3;
@@ -24,5 +27,11 @@ public class UserTestData {
         return new User(id1, "Updated", "user");
     }
 
+    public static void populateInMemoryDb(InMemoryUsersDAOImpl usersDAO) {
+
+        usersDAO.map.clear();
+        USERS.forEach(user -> usersDAO.map.put(user.getId(),user));
+
+    }
 
 }
