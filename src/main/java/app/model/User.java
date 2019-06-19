@@ -1,6 +1,7 @@
 package app.model;
 
 import lombok.*;
+import spark.utils.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,13 +13,15 @@ import javax.validation.constraints.NotBlank;
 @ToString
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity{
+public class User extends BaseEntity implements Validable{
 
     @NotBlank
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+//    @JsonIgnore
+//    private List<UserAttribute> attributes;
 
     public User() {
     }
@@ -33,10 +36,9 @@ public class User extends BaseEntity{
         this.lastName = lastName;
     }
 
-    /*
-    @JsonIgnore
-    private List<UserAttribute> attributes;
-*/
-
+    @Override
+    public boolean isValid() {
+        return lastName != null && StringUtils.isNotBlank(firstName);
+    }
 }
 

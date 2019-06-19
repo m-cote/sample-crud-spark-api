@@ -1,12 +1,13 @@
 package app.util.json;
 
+import app.model.Validable;
 import app.util.exception.JsonPayloadParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import java.io.IOException;
 
-public class JsonPayloadParser<PayloadT> {
+public class JsonPayloadParser<PayloadT extends Validable> {
 
     private final ObjectMapper objectMapper;
     private final Class<PayloadT> type;
@@ -19,7 +20,12 @@ public class JsonPayloadParser<PayloadT> {
 
     public PayloadT parse(String text) throws JsonPayloadParseException {
         try {
-            return objectMapper.readValue(text, type);
+            PayloadT payload = objectMapper.readValue(text, type);
+            if (payload != null
+                && !payload.isValid()) {
+                throw new JsonPayloadParseException("Invalid json payload: "+text);
+            }
+            return payload;
         } catch (IOException | IllegalArgumentException e) {
             throw new JsonPayloadParseException(e);
         }
