@@ -19,5 +19,7 @@
 
         <!-- Mapping With Model Class Containing Annotations -->
         <mapping class="app.model.User"></mapping>
+        <mapping class="app.model.UserSettings"></mapping>
+        <mapping class="app.model.UserAttribute"></mapping>
     </session-factory>
 </hibernate-configuration>

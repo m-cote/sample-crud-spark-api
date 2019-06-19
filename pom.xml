@@ -77,7 +77,7 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jdk8</artifactId>
+            <artifactId>jackson-datatype-hibernate5</artifactId>
             <version>${jackson-json.version}</version>
         </dependency>
 

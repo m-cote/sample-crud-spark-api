@@ -11,7 +11,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void assureIdConsistency(HasId entity, int id) throws IllegalPayloadException {
+    public static void setEntityId(HasId entity, int id) throws IllegalPayloadException {
         if (entity.isNew()) {
             entity.setId(id);
         } else if (entity.getId() != id) {

@@ -3,7 +3,6 @@ package app.util.json;
 import app.model.Validable;
 import app.util.exception.JsonPayloadParseException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 
 import java.io.IOException;
 
@@ -13,8 +12,7 @@ public class JsonPayloadParser<PayloadT extends Validable> {
     private final Class<PayloadT> type;
 
     public JsonPayloadParser(Class<PayloadT> type) {
-        this.objectMapper = new ObjectMapper()
-                .registerModule(new Jdk8Module());
+        this.objectMapper = new ObjectMapper();
         this.type = type;
     }
 
@@ -22,8 +20,8 @@ public class JsonPayloadParser<PayloadT extends Validable> {
         try {
             PayloadT payload = objectMapper.readValue(text, type);
             if (payload != null
-                && !payload.isValid()) {
-                throw new JsonPayloadParseException("Invalid json payload: "+text);
+                    && !payload.isValid()) {
+                throw new JsonPayloadParseException("Invalid json payload: " + text);
             }
             return payload;
         } catch (IOException | IllegalArgumentException e) {

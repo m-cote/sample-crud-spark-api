@@ -9,15 +9,12 @@ import app.util.exception.IllegalPayloadException;
 import app.util.exception.JsonPayloadParseException;
 import app.util.json.JsonPayloadParser;
 import org.eclipse.jetty.http.HttpStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import spark.Request;
 import spark.Response;
 
 import java.util.List;
 
-public class UsersController {
-    private final Logger log = LoggerFactory.getLogger(UsersController.class);
+public class UsersController extends AbstractController {
 
     private final JsonPayloadParser<User> jsonPayloadParser = new JsonPayloadParser<>(User.class);
 
@@ -51,19 +48,9 @@ public class UsersController {
             ValidationUtil.checkIsNew(user);
             saved = usersDAO.save(user);
         } catch (IllegalPayloadException e) {
-            log.info("Error while processing create request data", e);
-            throw ErrorResponder.builder()
-                    .statusCode(HttpStatus.BAD_REQUEST_400)
-                    .message("Error while processing create request data")
-                    .cause(e)
-                    .haltError();
+            badRequestResponse("Error while processing create request data", e);
         } catch (JsonPayloadParseException e) {
-            log.info("Error while deserializing update request", e);
-            throw ErrorResponder.builder()
-                    .statusCode(HttpStatus.BAD_REQUEST_400)
-                    .message("Error while deserializing update request")
-                    .cause(e)
-                    .haltError();
+            badRequestResponse("Error while deserializing create request", e);
         }
 
         response.status(HttpStatus.CREATED_201);
@@ -72,31 +59,20 @@ public class UsersController {
 
     public String update(Request request, Response response) {
 
-        int userId = RequestUtil.getParamUserId(request, log);
+        int id = RequestUtil.getParamUserId(request, log);
 
         try {
             User user = jsonPayloadParser.parse(request.body());
-            log.info("update {} with id {}", user, userId);
-            ValidationUtil.assureIdConsistency(user, userId);
+            log.info("update {} with id {}", user, id);
+            ValidationUtil.setEntityId(user, id);
             usersDAO.save(user);
         } catch (IllegalPayloadException e) {
-            log.info("User id is inconsistent with user path", e);
-            throw ErrorResponder.builder()
-                    .statusCode(HttpStatus.BAD_REQUEST_400)
-                    .message("User id is inconsistent with user path")
-                    .cause(e)
-                    .haltError();
+            badRequestResponse("User id is inconsistent with user path", e);
         } catch (JsonPayloadParseException e) {
-            log.info("Error while deserializing update request", e);
-            throw ErrorResponder.builder()
-                    .statusCode(HttpStatus.BAD_REQUEST_400)
-                    .message("Error while deserializing update request")
-                    .cause(e)
-                    .haltError();
+            badRequestResponse("Error while deserializing update request", e);
         }
 
-        response.status(HttpStatus.NO_CONTENT_204);
-        return "";
+        return noContentResponse(response);
     }
 
     public String delete(Request request, Response response) {
@@ -112,8 +88,7 @@ public class UsersController {
                     .haltError();
         }
 
-        response.status(HttpStatus.NO_CONTENT_204);
-        return "";
+        return noContentResponse(response);
     }
 
 }
