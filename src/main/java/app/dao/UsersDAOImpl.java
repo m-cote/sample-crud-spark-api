@@ -1,6 +1,8 @@
 package app.dao;
 
 import app.model.User;
+import app.util.ValidationUtil;
+import app.util.exception.NotFoundException;
 
 import java.util.List;
 
@@ -16,11 +18,13 @@ public class UsersDAOImpl extends AbstractDao implements UsersDAO {
     }
 
     @Override
-    public User findOne(int id) {
+    public User findOne(int id) throws NotFoundException {
 
         return doInJPA(em -> {
             setTransactionReadOnly(em);
-            return em.find(User.class, id);
+            final User user = em.find(User.class, id);
+            ValidationUtil.checkNotFoundWithId(user, "User with id " + id + " not found");
+            return user;
         });
     }
 
@@ -40,12 +44,13 @@ public class UsersDAOImpl extends AbstractDao implements UsersDAO {
     }
 
     @Override
-    public boolean delete(int id) {
+    public void delete(int id) throws NotFoundException {
 
-        return doInJPA(em -> {
-            return em.createQuery("DELETE FROM User u WHERE u.id=:id")
+        doInJPA(em -> {
+            final int rowsAffected = em.createQuery("DELETE FROM User u WHERE u.id=:id")
                     .setParameter("id", id)
-                    .executeUpdate() > 0;
+                    .executeUpdate();
+            ValidationUtil.checkNotFoundWithId(rowsAffected > 0, "User with id " + id + " not found");
         });
 
     }

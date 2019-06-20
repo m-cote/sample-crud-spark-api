@@ -35,7 +35,7 @@ public class InMemoryUsersDAOImpl implements UsersDAO {
     }
 
     @Override
-    public boolean delete(int id) {
-        return map.remove(id) != null;
+    public void delete(int id) {
+        map.remove(id);
     }
 }

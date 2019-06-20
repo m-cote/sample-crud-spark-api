@@ -7,19 +7,22 @@ import app.dao.UserSettingsDAOImpl;
 import app.dao.UsersDAO;
 import app.dao.UsersDAOImpl;
 import app.util.ErrorResponder;
+import app.util.exception.NotFoundException;
 import app.util.json.JsonTransformer;
 import lombok.Getter;
 import lombok.Setter;
 import org.eclipse.jetty.http.HttpStatus;
-import spark.Request;
-import spark.Response;
-import spark.Spark;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import static org.eclipse.jetty.http.HttpStatus.NOT_FOUND_404;
 import static spark.Spark.*;
 
 @Getter
 @Setter
-public class WebConfig {
+public class WebServer {
+
+    private static final Logger log = LoggerFactory.getLogger(WebServer.class);
 
     public static final String API_URL = "/api";
     public static final String USERS_URL = "/users";
@@ -30,7 +33,7 @@ public class WebConfig {
     private UserSettingsDAO userSettingsDAO;
     private UserSettingsController userSettingsController;
 
-    public void init() {
+    public void start() {
         if (usersDAO == null) {
             usersDAO = new UsersDAOImpl();
         }
@@ -44,6 +47,7 @@ public class WebConfig {
             userSettingsController = new UserSettingsController(userSettingsDAO);
         }
         setupRoutes();
+        configureExceptionHandling();
     }
 
     private void setupRoutes() {
@@ -69,10 +73,28 @@ public class WebConfig {
             });
         });
 
-        Spark.internalServerError((Request request, Response response) -> ErrorResponder.builder()
+    }
+
+    private void configureExceptionHandling() {
+        internalServerError((request, response) -> ErrorResponder.builder()
                 .statusCode(HttpStatus.INTERNAL_SERVER_ERROR_500)
                 .message("Internal Server Error")
                 .asString());
+
+        notFound((req, res) -> ErrorResponder.builder()
+                .statusCode(NOT_FOUND_404)
+                .message(String.format("%s %s can not be found", req.requestMethod(), req.pathInfo()))
+                .asString());
+
+        exception(NotFoundException.class, (ex, req, res) -> {
+            log.info(ex.getMessage(), ex);
+            res.status(NOT_FOUND_404);
+            res.body(ErrorResponder.builder()
+                    .statusCode(NOT_FOUND_404)
+                    .message("Entity not found")
+                    .cause(ex)
+                    .asString());
+        });
 
     }
 }

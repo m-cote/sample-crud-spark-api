@@ -24,8 +24,7 @@ public class UserSettingsController extends AbstractController {
         int userId = RequestUtil.getParamUserId(request, log);
         log.info("getOne with id {}", userId);
 
-        final UserSettings settings = userSettingsDAO.findOne(userId);
-        return settings;
+        return userSettingsDAO.findOne(userId);
     }
 
     public String update(Request request, Response response) {
@@ -38,9 +37,9 @@ public class UserSettingsController extends AbstractController {
             ValidationUtil.setEntityId(userSettings, id);
             userSettingsDAO.save(userSettings);
         } catch (IllegalPayloadException e) {
-            badRequestResponse("User id is inconsistent with user path", e);
+            badRequestErrorResponse("User id is inconsistent with user path", e);
         } catch (JsonPayloadParseException e) {
-            badRequestResponse("Error while deserializing update request", e);
+            badRequestErrorResponse("Error while deserializing update request", e);
         }
 
         return noContentResponse(response);

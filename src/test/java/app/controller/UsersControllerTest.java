@@ -9,14 +9,14 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static app.config.WebConfig.API_URL;
-import static app.config.WebConfig.USERS_URL;
+import static app.config.WebServer.API_URL;
+import static app.config.WebServer.USERS_URL;
 import static app.dao.UserTestData.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UsersControllerTest extends AbstractTest {
+class UsersControllerTest extends AbstractTest {
 
     private final String USERS_PATH = API_URL + USERS_URL;
     private final JsonTransformer jsonTransformer = new JsonTransformer();
@@ -36,6 +36,15 @@ public class UsersControllerTest extends AbstractTest {
                 .getObject("", User.class);
 
         assertThat(actual).isEqualToComparingFieldByField(u1);
+    }
+
+    @Test
+    void getShouldReturnNotFoundWhenNonExistentUser() throws Exception {
+
+        when()
+                .get(USERS_PATH + "/" + 42)
+        .then()
+                .statusCode(HttpStatus.NOT_FOUND_404);
     }
 
     @Test

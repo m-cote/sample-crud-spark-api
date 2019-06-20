@@ -2,7 +2,6 @@ package app.controller;
 
 import app.dao.UsersDAO;
 import app.model.User;
-import app.util.ErrorResponder;
 import app.util.RequestUtil;
 import app.util.ValidationUtil;
 import app.util.exception.IllegalPayloadException;
@@ -48,9 +47,9 @@ public class UsersController extends AbstractController {
             ValidationUtil.checkIsNew(user);
             saved = usersDAO.save(user);
         } catch (IllegalPayloadException e) {
-            badRequestResponse("Error while processing create request data", e);
+            badRequestErrorResponse("Error while processing create request data", e);
         } catch (JsonPayloadParseException e) {
-            badRequestResponse("Error while deserializing create request", e);
+            badRequestErrorResponse("Error while deserializing create request", e);
         }
 
         response.status(HttpStatus.CREATED_201);
@@ -67,9 +66,9 @@ public class UsersController extends AbstractController {
             ValidationUtil.setEntityId(user, id);
             usersDAO.save(user);
         } catch (IllegalPayloadException e) {
-            badRequestResponse("User id is inconsistent with user path", e);
+            badRequestErrorResponse("User id is inconsistent with user path", e);
         } catch (JsonPayloadParseException e) {
-            badRequestResponse("Error while deserializing update request", e);
+            badRequestErrorResponse("Error while deserializing update request", e);
         }
 
         return noContentResponse(response);
@@ -81,12 +80,7 @@ public class UsersController extends AbstractController {
 
         log.info("delete with id {}", userId);
 
-        if (!usersDAO.delete(userId)) {
-            throw ErrorResponder.builder()
-                    .statusCode(HttpStatus.NOT_FOUND_404)
-                    .message("User with id " + userId + " not found")
-                    .haltError();
-        }
+        usersDAO.delete(userId);
 
         return noContentResponse(response);
     }
