@@ -1,16 +1,17 @@
 package app.model;
 
-import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import spark.utils.StringUtils;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "userSettings,attributes")
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements Validable{
@@ -20,6 +21,12 @@ public class User extends BaseEntity implements Validable{
     private String firstName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)
+    private UserSettings settings;
+
+//    @OneToMany(orphanRemoval = true)
 //    @JsonIgnore
 //    private List<UserAttribute> attributes;
 
@@ -34,6 +41,11 @@ public class User extends BaseEntity implements Validable{
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    public void setSettings(UserSettings settings) {
+        this.settings = settings;
+        settings.setUser(this);
     }
 
     @Override

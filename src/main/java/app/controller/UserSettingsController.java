@@ -7,12 +7,15 @@ import app.util.ValidationUtil;
 import app.util.exception.IllegalPayloadException;
 import app.util.exception.JsonPayloadParseException;
 import app.util.json.JsonPayloadParser;
+import org.eclipse.jetty.http.HttpStatus;
 import spark.Request;
 import spark.Response;
+import spark.Route;
 
 public class UserSettingsController extends AbstractController {
 
     private final JsonPayloadParser<UserSettings> jsonPayloadParser = new JsonPayloadParser<>(UserSettings.class);
+    static final String ALLOWED_METHODS = "GET, HEAD, PUT";
 
     private UserSettingsDAO userSettingsDAO;
 
@@ -43,6 +46,14 @@ public class UserSettingsController extends AbstractController {
         }
 
         return noContentResponse(response);
+    }
+
+    public Route methodNotAllowed() {
+        return (request, response) -> {
+            response.status(HttpStatus.METHOD_NOT_ALLOWED_405);
+            response.header("Allow", ALLOWED_METHODS);
+            return "";
+        };
     }
 
 }

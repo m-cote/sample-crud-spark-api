@@ -69,6 +69,8 @@ public class WebServer {
                 path("/:userId" + SETTINGS_URL, () -> {
                     get("", userSettingsController::getOne);
                     put("", "application/json", userSettingsController::update);
+                    post("", userSettingsController.methodNotAllowed());
+                    delete("", userSettingsController.methodNotAllowed());
                 });
             });
         });
@@ -97,4 +99,5 @@ public class WebServer {
         });
 
     }
+
 }

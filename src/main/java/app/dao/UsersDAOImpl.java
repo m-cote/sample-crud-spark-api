@@ -1,6 +1,7 @@
 package app.dao;
 
 import app.model.User;
+import app.model.UserSettings;
 import app.util.ValidationUtil;
 import app.util.exception.NotFoundException;
 
@@ -13,7 +14,7 @@ public class UsersDAOImpl extends AbstractDao implements UsersDAO {
 
         return doInJPA(em -> {
             setTransactionReadOnly(em);
-            return em.createQuery("SELECT u FROM User as u", User.class).getResultList();
+            return em.createQuery("SELECT u FROM User as u LEFT JOIN FETCH u.settings", User.class).getResultList();
         });
     }
 
@@ -34,6 +35,9 @@ public class UsersDAOImpl extends AbstractDao implements UsersDAO {
         return doInJPA(em -> {
 
             if (user.isNew()) {
+                if (user.getSettings() == null) {
+                    user.setSettings(UserSettings.getDefault());
+                }
                 em.persist(user);
                 return user;
             } else {

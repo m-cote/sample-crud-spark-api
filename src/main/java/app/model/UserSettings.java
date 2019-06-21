@@ -2,8 +2,6 @@ package app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -11,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@ToString(exclude = "user")
 @Entity(name = "UserSettings")
 @Table(name = "user_settings")
 public class UserSettings implements HasId, Validable{
@@ -22,17 +20,30 @@ public class UserSettings implements HasId, Validable{
     @JsonIgnore
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
 
     @Column(name = "send_sms")
-    private boolean sendSms = false;
+    private Boolean sendSms;
     @Column(name = "send_email")
-    private boolean sendEmail = false;
+    private Boolean sendEmail;
+
+    public UserSettings(boolean sendSms, boolean sendEmail) {
+        this.sendSms = sendSms;
+        this.sendEmail = sendEmail;
+    }
+
+    public static UserSettings getDefault(){
+        return new UserSettings(true, false);
+    }
+
 
     @Override
     public boolean isNew() {
         return id == null;
     }
 
+    @Override
+    public boolean isValid() {
+        return sendSms != null && sendEmail != null;
+    }
 }

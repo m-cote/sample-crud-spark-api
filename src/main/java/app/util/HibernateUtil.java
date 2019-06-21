@@ -6,11 +6,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.jdbc.Work;
-import spark.utils.IOUtils;
 import spark.utils.StringUtils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -62,5 +59,6 @@ public class HibernateUtil {
             });
         }
     }
+
 
 }

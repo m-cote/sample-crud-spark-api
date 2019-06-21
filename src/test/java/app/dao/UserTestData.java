@@ -1,7 +1,14 @@
 package app.dao;
 
 import app.model.User;
-import com.sun.tools.javac.util.List;
+import app.util.HibernateUtil;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 public class UserTestData {
 
@@ -17,7 +24,7 @@ public class UserTestData {
     public static final User u2 = new User(id2, "Dashawn", "Deckow");
     public static final User u3 = new User(id3, "Joesph", "Cormier");
     public static final User u4 = new User(id4, "Missouri", "Lemke");
-    public static final List<User> USERS = List.of(u1, u2, u3, u4);
+    public static final List<User> USERS = Arrays.asList(u1, u2, u3, u4);
 
     public static User created() {
         return new User("Created", "user");
@@ -27,10 +34,27 @@ public class UserTestData {
         return new User(id1, "Updated", "user");
     }
 
-    public static void populateInMemoryDb(InMemoryUsersDAOImpl usersDAO) {
+    public static void populateDb(UsersDAO usersDAO) {
 
-        usersDAO.map.clear();
-        USERS.forEach(user -> usersDAO.map.put(user.getId(),user));
+        if (usersDAO instanceof InMemoryUsersDAOImpl) {
+            Map<Integer, User> inMemoryMap = ((InMemoryUsersDAOImpl) usersDAO).map;
+            inMemoryMap.clear();
+            USERS.forEach(user -> inMemoryMap.put(user.getId(), user));
+        } else {
+
+            for (User user : USERS) {
+
+                SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+                Transaction tx = null;
+                try (Session session = sessionFactory.openSession()) {
+                    tx = session.beginTransaction();
+                    session.save(user);
+                    tx.commit();
+                } catch (Exception e) {
+                    tx.rollback();
+                }
+            }
+        }
 
     }
 

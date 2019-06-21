@@ -23,35 +23,33 @@ public abstract class AbstractDao {
 
         EntityManager entityManager = null;
         EntityTransaction txn = null;
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
 
-            try {
-                entityManager = session.getEntityManagerFactory().createEntityManager();
-                txn = entityManager.getTransaction();
-                txn.begin();
-                function.accept(entityManager);
-                if (!txn.getRollbackOnly()) {
-                    txn.commit();
-                } else {
-                    try {
-                        txn.rollback();
-                    } catch (Exception e) {
-                        log.error("Rollback failure", e);
-                    }
+        try {
+            entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+            txn = entityManager.getTransaction();
+            txn.begin();
+            function.accept(entityManager);
+            if (!txn.getRollbackOnly()) {
+                txn.commit();
+            } else {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
                 }
-            } catch (Throwable t) {
-                if (txn != null && txn.isActive()) {
-                    try {
-                        txn.rollback();
-                    } catch (Exception e) {
-                        log.error("Rollback failure", e);
-                    }
+            }
+        } catch (Throwable t) {
+            if (txn != null && txn.isActive()) {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
                 }
-                throw t;
-            } finally {
-                if (entityManager != null) {
-                    entityManager.close();
-                }
+            }
+            throw t;
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
             }
         }
     }
@@ -62,38 +60,35 @@ public abstract class AbstractDao {
         EntityManager entityManager = null;
         EntityTransaction txn = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            try {
-                entityManager = session.getEntityManagerFactory().createEntityManager();
-                txn = entityManager.getTransaction();
-                txn.begin();
-                result = function.apply(entityManager);
-                if (!txn.getRollbackOnly()) {
-                    txn.commit();
-                } else {
-                    try {
-                        txn.rollback();
-                    } catch (Exception e) {
-                        log.error("Rollback failure", e);
-                    }
-                }
-            } catch (Throwable t) {
-                if (txn != null && txn.isActive()) {
-                    try {
-                        txn.rollback();
-                    } catch (Exception e) {
-                        log.error("Rollback failure", e);
-                    }
-                }
-                throw t;
-            } finally {
-                if (entityManager != null) {
-                    entityManager.close();
+        try {
+            entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+            txn = entityManager.getTransaction();
+            txn.begin();
+            result = function.apply(entityManager);
+            if (!txn.getRollbackOnly()) {
+                txn.commit();
+            } else {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
                 }
             }
-            return result;
+        } catch (Throwable t) {
+            if (txn != null && txn.isActive()) {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
+                }
+            }
+            throw t;
+        } finally {
+            if (entityManager != null) {
+                entityManager.close();
+            }
         }
+        return result;
     }
-
 
 }
