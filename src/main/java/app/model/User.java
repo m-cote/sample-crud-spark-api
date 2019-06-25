@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-@ToString(exclude = "userSettings,attributes")
+@ToString(exclude = "settings,attributes")
 @Entity
 @Table(name = "users")
 public class User extends BaseEntity implements Validable{
@@ -26,9 +26,11 @@ public class User extends BaseEntity implements Validable{
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER)
     private UserSettings settings;
 
-//    @OneToMany(orphanRemoval = true)
-//    @JsonIgnore
-//    private List<UserAttribute> attributes;
+/*
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", orphanRemoval = false, fetch = FetchType.LAZY)
+    private List<UserAttribute> attributes;
+*/
 
     public User() {
     }

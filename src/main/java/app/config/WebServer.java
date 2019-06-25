@@ -1,11 +1,9 @@
 package app.config;
 
+import app.controller.UserAttributesController;
 import app.controller.UserSettingsController;
 import app.controller.UsersController;
-import app.dao.UserSettingsDAO;
-import app.dao.UserSettingsDAOImpl;
-import app.dao.UsersDAO;
-import app.dao.UsersDAOImpl;
+import app.dao.*;
 import app.util.ErrorResponder;
 import app.util.exception.NotFoundException;
 import app.util.json.JsonTransformer;
@@ -27,13 +25,22 @@ public class WebServer {
     public static final String API_URL = "/api";
     public static final String USERS_URL = "/users";
     public static final String SETTINGS_URL = "/settings";
+    public static final String ATTRIBUTES_URL = "/attributes";
 
     private UsersDAO usersDAO;
     private UsersController usersController;
     private UserSettingsDAO userSettingsDAO;
     private UserSettingsController userSettingsController;
+    private UserAttributesDAO userAttributesDAO;
+    private UserAttributesController userAttributesController;
 
     public void start() {
+        initBeans();
+        setupRoutes();
+        configureExceptionHandling();
+    }
+
+    private void initBeans() {
         if (usersDAO == null) {
             usersDAO = new UsersDAOImpl();
         }
@@ -46,8 +53,12 @@ public class WebServer {
         if (userSettingsController == null) {
             userSettingsController = new UserSettingsController(userSettingsDAO);
         }
-        setupRoutes();
-        configureExceptionHandling();
+        if (userAttributesDAO == null) {
+            userAttributesDAO = new UserAttributesDAOImpl();
+        }
+        if (userAttributesController == null) {
+            userAttributesController = new UserAttributesController(userAttributesDAO);
+        }
     }
 
     private void setupRoutes() {
@@ -71,6 +82,13 @@ public class WebServer {
                     put("", "application/json", userSettingsController::update);
                     post("", userSettingsController.methodNotAllowed());
                     delete("", userSettingsController.methodNotAllowed());
+                });
+
+                path("/:userId" + ATTRIBUTES_URL, () -> {
+                    get("", userAttributesController::getAll);
+                    get("/:attributeKey", userAttributesController::getOne);
+                    post("", userAttributesController::save);
+                    delete("/:attributeKey", userAttributesController::delete);
                 });
             });
         });

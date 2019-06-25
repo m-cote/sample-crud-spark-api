@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS user_settings;
+DROP TABLE IF EXISTS user_attributes;
 DROP TABLE IF EXISTS users;
 
 CREATE TABLE `users` (
@@ -16,4 +17,14 @@ CREATE TABLE `user_settings` (
                                 ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+create table user_attributes
+(
+    `user_id` int(9) unsigned NOT NULL,
+    `key`   varchar(150) not null,
+    value   varchar(1000)   not null,
+    PRIMARY KEY (user_id, `key`),
+    FOREIGN KEY (`user_id`)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 
+);

@@ -2,6 +2,9 @@ package app.dao;
 
 import app.util.HibernateUtil;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.jdbc.ReturningWork;
+import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +23,21 @@ public abstract class AbstractDao {
     }
 
     protected void doInJPA(Consumer<EntityManager> function) {
+        doInJPA(function, false);
+    }
+
+    protected void doInJPA(Consumer<EntityManager> function, boolean readOnly) {
 
         EntityManager entityManager = null;
         EntityTransaction txn = null;
 
         try {
             entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+
+            if (readOnly) {
+                setTransactionReadOnly(entityManager);
+            }
+
             txn = entityManager.getTransaction();
             txn.begin();
             function.accept(entityManager);
@@ -55,6 +67,10 @@ public abstract class AbstractDao {
     }
 
     protected <T> T doInJPA(Function<EntityManager, T> function) {
+        return doInJPA(function, false);
+    }
+
+    protected <T> T doInJPA(Function<EntityManager, T> function, boolean readOnly) {
 
         T result = null;
         EntityManager entityManager = null;
@@ -62,6 +78,11 @@ public abstract class AbstractDao {
 
         try {
             entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+
+            if (readOnly) {
+                setTransactionReadOnly(entityManager);
+            }
+
             txn = entityManager.getTransaction();
             txn.begin();
             result = function.apply(entityManager);
@@ -91,4 +112,74 @@ public abstract class AbstractDao {
         return result;
     }
 
+    protected void doInHibernateSession(Work work) {
+        doInHibernateSession(work, false);
+    }
+
+    protected void doInHibernateSession(Work work, boolean readOnly) {
+
+        Transaction txn = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.setDefaultReadOnly(readOnly);
+            txn = session.getTransaction();
+            txn.begin();
+            session.doWork(work);
+            if (!txn.getRollbackOnly()) {
+                txn.commit();
+            } else {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
+                }
+            }
+        } catch (Throwable t) {
+            if (txn != null && txn.isActive()) {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
+                }
+            }
+            throw t;
+        }
+    }
+
+    protected <T> T doInHibernateSession(ReturningWork<T> work) {
+        return doInHibernateSession(work, false);
+    }
+
+    protected <T> T doInHibernateSession(ReturningWork<T> work, boolean readOnly) {
+
+        T result = null;
+        Transaction txn = null;
+
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            session.setDefaultReadOnly(readOnly);
+            txn = session.getTransaction();
+            txn.begin();
+            result = session.doReturningWork(work);
+            if (!txn.getRollbackOnly()) {
+                txn.commit();
+            } else {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
+                }
+            }
+        } catch (Throwable t) {
+            if (txn != null && txn.isActive()) {
+                try {
+                    txn.rollback();
+                } catch (Exception e) {
+                    log.error("Rollback failure", e);
+                }
+            }
+            throw t;
+        }
+
+        return result;
+    }
 }
