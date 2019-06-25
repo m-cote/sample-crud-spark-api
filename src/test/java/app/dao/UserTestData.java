@@ -1,9 +1,8 @@
 package app.dao;
 
 import app.model.User;
-import app.util.HibernateUtil;
+import app.util.JpaUtil;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
 import java.util.Arrays;
@@ -44,9 +43,8 @@ public class UserTestData {
 
             for (User user : USERS) {
 
-                SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
                 Transaction tx = null;
-                try (Session session = sessionFactory.openSession()) {
+                try (Session session = JpaUtil.openSession()) {
                     tx = session.beginTransaction();
                     session.save(user);
                     tx.commit();

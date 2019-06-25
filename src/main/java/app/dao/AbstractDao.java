@@ -1,6 +1,6 @@
 package app.dao;
 
-import app.util.HibernateUtil;
+import app.util.JpaUtil;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.jdbc.ReturningWork;
@@ -32,7 +32,7 @@ public abstract class AbstractDao {
         EntityTransaction txn = null;
 
         try {
-            entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+            entityManager = JpaUtil.createEntityManager();
 
             if (readOnly) {
                 setTransactionReadOnly(entityManager);
@@ -77,7 +77,7 @@ public abstract class AbstractDao {
         EntityTransaction txn = null;
 
         try {
-            entityManager = HibernateUtil.getSessionFactory().createEntityManager();
+            entityManager = JpaUtil.createEntityManager();
 
             if (readOnly) {
                 setTransactionReadOnly(entityManager);
@@ -120,7 +120,7 @@ public abstract class AbstractDao {
 
         Transaction txn = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = JpaUtil.openSession()) {
             session.setDefaultReadOnly(readOnly);
             txn = session.getTransaction();
             txn.begin();
@@ -155,7 +155,7 @@ public abstract class AbstractDao {
         T result = null;
         Transaction txn = null;
 
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+        try (Session session = JpaUtil.openSession()) {
             session.setDefaultReadOnly(readOnly);
             txn = session.getTransaction();
             txn.begin();

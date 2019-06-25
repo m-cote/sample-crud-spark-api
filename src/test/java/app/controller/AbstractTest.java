@@ -2,7 +2,7 @@ package app.controller;
 
 import app.config.WebServer;
 import app.util.FileHelper;
-import app.util.HibernateUtil;
+import app.util.JpaUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -20,7 +20,7 @@ class AbstractTest {
 
     @BeforeEach
     void setUp() {
-        HibernateUtil.executeSql(populateTestDataSql);
+        JpaUtil.executeSql(populateTestDataSql);
     }
 
 }

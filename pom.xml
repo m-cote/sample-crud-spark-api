@@ -18,7 +18,7 @@
         <hibernate.validator.version>6.0.16.Final</hibernate.validator.version>
         <junit.jupiter.version>5.4.2</junit.jupiter.version>
         <junit.version>4.12</junit.version>
-        <slf4j.version>1.7.21</slf4j.version>
+        <slf4j.version>1.7.25</slf4j.version>
         <javax-el.version>3.0.1-b11</javax-el.version>
         <spring.version>5.1.7.RELEASE</spring.version>
         <rest-assured.version>4.0.0</rest-assured.version>
