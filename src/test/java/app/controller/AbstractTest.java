@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 class AbstractTest {
 
-    private final static String populateTestDataSql = FileHelper.extractResourceContent("db/populateDb.sql");
+    private final static String populateTestDataSql = FileHelper.extractResourceContent("db/test-data.sql");
 
     @BeforeAll
     static void init() {
