@@ -19,13 +19,11 @@ Manage users.
 Create a new user
 
 #### Example Request
-``` text
-curl --location --request POST "http://localhost:8080/api/users" \
-  --data "{
+
+    $ curl --location --request POST "http://localhost:8080/api/users" --data "{
     \"firstName\": \"Created user name\",
     \"lastName\": \"Created user last name\"
-}"
-```
+    }"
 
 #### Example Response
 `201 Created`
@@ -45,7 +43,7 @@ curl --location --request POST "http://localhost:8080/api/users" \
 Get all users
 
 #### Example Request
-`curl --location --request GET "http://localhost:8080/api/users"`
+    $ curl --location --request GET "http://localhost:8080/api/users"
 
 #### Example Response
 `200 OK`
@@ -80,7 +78,7 @@ Get all users
 Get information about one specific user
 
 #### Example Request
-`curl --location --request GET "http://localhost:8080/api/users/1"`
+    $ curl --location --request GET "http://localhost:8080/api/users/1"
 #### Example Response
 `200 OK`
 
@@ -99,13 +97,10 @@ Update all information about a user
 
 #### Example Request
 
-``` text
-curl --location --request PUT "http://localhost:8080/api/users/1" \
-  --data "{
+    $ curl --location --request PUT "http://localhost:8080/api/users/1" --data "{
     \"firstName\": \"Anna Updated\",
     \"lastName\": \"Gutkowski Updated\"
-}"
-```
+    }"
 
 ## Delete
 
@@ -114,4 +109,4 @@ curl --location --request PUT "http://localhost:8080/api/users/1" \
 Delete a user
 
 #### Example request
-`curl --location --request DELETE "http://localhost:8080/api/users/1"`
+    $ curl --location --request DELETE "http://localhost:8080/api/users/1"

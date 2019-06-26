@@ -11,12 +11,9 @@ Attributes are string key-value pairs which describe an associated user. Use the
 Create attributes or update its values for a specific user. Values of attributes not featured in the request won't be affected.
 
 #### Example Request
-``` text
-curl --location --request POST "http://localhost:8080/api/users/1/attributes" \
-  --data "{
+    $ curl --location --request POST "http://localhost:8080/api/users/1/attributes" --data "{
     \"comment\": \"new attribute value\"
-}"
-```
+    }"
 
 ## Read
 
@@ -25,7 +22,7 @@ curl --location --request POST "http://localhost:8080/api/users/1/attributes" \
 Get attributes currently associated with a specific user.
 
 #### Example Request
-`curl --location --request GET "http://localhost:8080/api/users/1/attributes"`
+    $ curl --location --request GET "http://localhost:8080/api/users/1/attributes"
 
 #### Example Response
 `200 OK`
@@ -42,7 +39,7 @@ Get attributes currently associated with a specific user.
 Get an attribute for a user by specifying attribute's key and user's unique id.
 
 #### Example Request
-`curl --location --request GET "http://localhost:8080/api/users/1/attributes/email"`
+    $ curl --location --request GET "http://localhost:8080/api/users/1/attributes/email"
 #### Example Response
 `200 OK`
 
@@ -59,13 +56,10 @@ Create attributes or update its values for a specific user. Values of attributes
 
 #### Example Request
 
-``` text
-curl --location --request POST "http://localhost:8080/api/users/1/attributes" \
-  --data "{
+    $ curl --location --request POST "http://localhost:8080/api/users/1/attributes" --data "{
 	\"email\": \"updated@email.com\",
     \"phone\": \"updated +380990001111\"
-}"
-```
+    }"
 
 ## Delete
 
@@ -74,4 +68,4 @@ curl --location --request POST "http://localhost:8080/api/users/1/attributes" \
 Remove an attribute associated with a specific user.
 
 #### Example request
-`curl --location --request DELETE "http://localhost:8080/api/users/1/attributes/email"`
+    $ curl --location --request DELETE "http://localhost:8080/api/users/1/attributes/email"
