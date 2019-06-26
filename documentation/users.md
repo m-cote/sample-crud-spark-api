@@ -2,6 +2,14 @@
 
 Manage users.
 
+### Subresources
+
+* [Settings]
+* [Attributes]
+
+[Settings]: user-settings.md "User Settings"
+[Attributes]: user-attributes.md "User Attributes"
+
 ### Available methods
 
 ## Create
@@ -10,7 +18,7 @@ Manage users.
 
 Create a new user
 
-####Example Request
+#### Example Request
 ``` text
 curl --location --request POST "http://localhost:8080/api/users" \
   --data "{
@@ -19,7 +27,7 @@ curl --location --request POST "http://localhost:8080/api/users" \
 }"
 ```
 
-####Example Response
+#### Example Response
 `201 Created`
 
 ``` json
@@ -36,10 +44,10 @@ curl --location --request POST "http://localhost:8080/api/users" \
 
 Get all users
 
-####Example Request
+#### Example Request
 `curl --location --request GET "http://localhost:8080/api/users"`
 
-####Example Response
+#### Example Response
 `200 OK`
 
 ``` json
@@ -71,9 +79,9 @@ Get all users
 
 Get information about one specific user
 
-####Example Request
+#### Example Request
 `curl --location --request GET "http://localhost:8080/api/users/1"`
-####Example Response
+#### Example Response
 `200 OK`
 
 ``` json
@@ -89,7 +97,7 @@ Get information about one specific user
 
 Update all information about a user
 
-####Example Request
+#### Example Request
 
 ``` text
 curl --location --request PUT "http://localhost:8080/api/users/1" \
@@ -105,5 +113,5 @@ curl --location --request PUT "http://localhost:8080/api/users/1" \
 
 Delete a user
 
-####Example request
+#### Example request
 `curl --location --request DELETE "http://localhost:8080/api/users/1"`
