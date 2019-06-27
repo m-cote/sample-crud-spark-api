@@ -1,9 +1,9 @@
-package app.dao;
+package app.repository;
 
 import app.model.UserSettings;
 import app.util.exception.NotFoundException;
 
-public interface UserSettingsDAO {
+public interface UserSettingsRepository {
 
     UserSettings findOne(int id) throws NotFoundException;
 

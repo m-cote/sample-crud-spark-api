@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 import static app.config.WebServer.*;
-import static app.dao.UserAttributesTestData.*;
-import static app.dao.UserTestData.id1;
+import static app.repository.UserAttributesTestData.*;
+import static app.repository.UserTestData.id1;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;

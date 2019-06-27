@@ -1,10 +1,10 @@
-package app.dao;
+package app.repository;
 
 import app.model.UserSettings;
 import app.util.ValidationUtil;
 import app.util.exception.NotFoundException;
 
-public class UserSettingsDAOImpl extends AbstractDao implements UserSettingsDAO {
+public class UserSettingsRepositoryImpl extends AbstractRepository implements UserSettingsRepository {
     @Override
     public UserSettings findOne(int id) throws NotFoundException {
         return doInJPA(em -> {

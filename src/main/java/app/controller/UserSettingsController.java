@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.dao.UserSettingsDAO;
 import app.model.UserSettings;
+import app.repository.UserSettingsRepository;
 import app.util.RequestUtil;
 import app.util.ValidationUtil;
 import app.util.exception.IllegalPayloadException;
@@ -17,17 +17,17 @@ public class UserSettingsController extends AbstractController {
     private final JsonPayloadParser<UserSettings> jsonPayloadParser = new JsonPayloadParser<>(UserSettings.class);
     static final String ALLOWED_METHODS = "GET, HEAD, PUT";
 
-    private UserSettingsDAO userSettingsDAO;
+    private UserSettingsRepository userSettingsRepository;
 
-    public UserSettingsController(UserSettingsDAO userSettingsDAO) {
-        this.userSettingsDAO = userSettingsDAO;
+    public UserSettingsController(UserSettingsRepository userSettingsRepository) {
+        this.userSettingsRepository = userSettingsRepository;
     }
 
     public UserSettings getOne(Request request, Response response) {
         int userId = RequestUtil.getParamUserId(request, log);
         log.info("getOne with id {}", userId);
 
-        return userSettingsDAO.findOne(userId);
+        return userSettingsRepository.findOne(userId);
     }
 
     public String update(Request request, Response response) {
@@ -38,7 +38,7 @@ public class UserSettingsController extends AbstractController {
             UserSettings userSettings = jsonPayloadParser.parse(request.body());
             log.info("update {} with id {}", userSettings, id);
             ValidationUtil.setEntityId(userSettings, id);
-            userSettingsDAO.save(userSettings);
+            userSettingsRepository.save(userSettings);
         } catch (IllegalPayloadException e) {
             badRequestErrorResponse("User id is inconsistent with user path", e);
         } catch (JsonPayloadParseException e) {

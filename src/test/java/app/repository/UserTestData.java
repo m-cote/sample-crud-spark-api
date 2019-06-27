@@ -1,4 +1,4 @@
-package app.dao;
+package app.repository;
 
 import app.model.User;
 import app.util.JpaUtil;
@@ -33,10 +33,10 @@ public class UserTestData {
         return new User(id1, "Updated", "user");
     }
 
-    public static void populateDb(UsersDAO usersDAO) {
+    public static void populateDb(UsersRepository usersRepository) {
 
-        if (usersDAO instanceof InMemoryUsersDAOImpl) {
-            Map<Integer, User> inMemoryMap = ((InMemoryUsersDAOImpl) usersDAO).map;
+        if (usersRepository instanceof InMemoryUsersRepositoryImpl) {
+            Map<Integer, User> inMemoryMap = ((InMemoryUsersRepositoryImpl) usersRepository).map;
             inMemoryMap.clear();
             USERS.forEach(user -> inMemoryMap.put(user.getId(), user));
         } else {

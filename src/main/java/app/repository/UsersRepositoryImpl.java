@@ -1,4 +1,4 @@
-package app.dao;
+package app.repository;
 
 import app.model.User;
 import app.model.UserSettings;
@@ -7,7 +7,7 @@ import app.util.exception.NotFoundException;
 
 import java.util.List;
 
-public class UsersDAOImpl extends AbstractDao implements UsersDAO {
+public class UsersRepositoryImpl extends AbstractRepository implements UsersRepository {
 
     @Override
     public List<User> findAll() {

@@ -1,16 +1,16 @@
 package app.controller;
 
-import app.dao.UserSettingsTestData;
 import app.model.User;
 import app.model.UserSettings;
+import app.repository.UserSettingsTestData;
 import app.util.json.JsonTransformer;
 import io.restassured.http.ContentType;
 import org.eclipse.jetty.http.HttpStatus;
 import org.junit.jupiter.api.Test;
 
 import static app.config.WebServer.*;
-import static app.dao.UserSettingsTestData.us1;
-import static app.dao.UserTestData.*;
+import static app.repository.UserSettingsTestData.us1;
+import static app.repository.UserTestData.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;

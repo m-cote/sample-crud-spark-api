@@ -1,4 +1,4 @@
-package app.dao;
+package app.repository;
 
 import app.model.UserAttribute;
 import app.util.ValidationUtil;
@@ -7,7 +7,7 @@ import app.util.exception.NotFoundException;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-public class UserAttributesDAOImpl extends AbstractDao implements UserAttributesDAO {
+public class UserAttributesRepositoryImpl extends AbstractRepository implements UserAttributesRepository {
 
     @Override
     public List<UserAttribute> findAll(int userId) {

@@ -3,7 +3,7 @@ package app.config;
 import app.controller.UserAttributesController;
 import app.controller.UserSettingsController;
 import app.controller.UsersController;
-import app.dao.*;
+import app.repository.*;
 import app.util.ErrorResponder;
 import app.util.exception.NotFoundException;
 import app.util.json.JsonTransformer;
@@ -27,11 +27,11 @@ public class WebServer {
     public static final String SETTINGS_URL = "/settings";
     public static final String ATTRIBUTES_URL = "/attributes";
 
-    private UsersDAO usersDAO;
+    private UsersRepository usersRepository;
     private UsersController usersController;
-    private UserSettingsDAO userSettingsDAO;
+    private UserSettingsRepository userSettingsRepository;
     private UserSettingsController userSettingsController;
-    private UserAttributesDAO userAttributesDAO;
+    private UserAttributesRepository userAttributesRepository;
     private UserAttributesController userAttributesController;
 
     public void start() {
@@ -41,23 +41,23 @@ public class WebServer {
     }
 
     private void initBeans() {
-        if (usersDAO == null) {
-            usersDAO = new UsersDAOImpl();
+        if (usersRepository == null) {
+            usersRepository = new UsersRepositoryImpl();
         }
         if (usersController == null) {
-            usersController = new UsersController(usersDAO);
+            usersController = new UsersController(usersRepository);
         }
-        if (userSettingsDAO == null) {
-            userSettingsDAO = new UserSettingsDAOImpl();
+        if (userSettingsRepository == null) {
+            userSettingsRepository = new UserSettingsRepositoryImpl();
         }
         if (userSettingsController == null) {
-            userSettingsController = new UserSettingsController(userSettingsDAO);
+            userSettingsController = new UserSettingsController(userSettingsRepository);
         }
-        if (userAttributesDAO == null) {
-            userAttributesDAO = new UserAttributesDAOImpl();
+        if (userAttributesRepository == null) {
+            userAttributesRepository = new UserAttributesRepositoryImpl();
         }
         if (userAttributesController == null) {
-            userAttributesController = new UserAttributesController(userAttributesDAO);
+            userAttributesController = new UserAttributesController(userAttributesRepository);
         }
     }
 

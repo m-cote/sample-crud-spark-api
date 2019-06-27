@@ -1,4 +1,4 @@
-package app.dao;
+package app.repository;
 
 import app.util.JpaUtil;
 import org.hibernate.Session;
@@ -13,7 +13,7 @@ import javax.persistence.EntityTransaction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public abstract class AbstractDao {
+public abstract class AbstractRepository {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

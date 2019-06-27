@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.dao.UsersDAO;
 import app.model.User;
+import app.repository.UsersRepository;
 import app.util.RequestUtil;
 import app.util.ValidationUtil;
 import app.util.exception.IllegalPayloadException;
@@ -17,16 +17,16 @@ public class UsersController extends AbstractController {
 
     private final JsonPayloadParser<User> jsonPayloadParser = new JsonPayloadParser<>(User.class);
 
-    private UsersDAO usersDAO;
+    private UsersRepository usersRepository;
 
-    public UsersController(UsersDAO usersDAO) {
-        this.usersDAO = usersDAO;
+    public UsersController(UsersRepository usersRepository) {
+        this.usersRepository = usersRepository;
     }
 
     public List<User> getAll(Request request, Response response) {
 
         log.info("getAll");
-        return usersDAO.findAll();
+        return usersRepository.findAll();
     }
 
     public User getOne(Request request, Response response) {
@@ -34,7 +34,7 @@ public class UsersController extends AbstractController {
         int userId = RequestUtil.getParamUserId(request, log);
         log.info("getOne with id {}", userId);
 
-        return usersDAO.findOne(userId);
+        return usersRepository.findOne(userId);
     }
 
     public User create(Request request, Response response) {
@@ -45,7 +45,7 @@ public class UsersController extends AbstractController {
             log.info("create {}", user);
 
             ValidationUtil.checkIsNew(user);
-            saved = usersDAO.save(user);
+            saved = usersRepository.save(user);
         } catch (IllegalPayloadException e) {
             badRequestErrorResponse("Error while processing create request data", e);
         } catch (JsonPayloadParseException e) {
@@ -64,7 +64,7 @@ public class UsersController extends AbstractController {
             User user = jsonPayloadParser.parse(request.body());
             log.info("update {} with id {}", user, id);
             ValidationUtil.setEntityId(user, id);
-            usersDAO.save(user);
+            usersRepository.save(user);
         } catch (IllegalPayloadException e) {
             badRequestErrorResponse("User id is inconsistent with user path", e);
         } catch (JsonPayloadParseException e) {
@@ -80,7 +80,7 @@ public class UsersController extends AbstractController {
 
         log.info("delete with id {}", userId);
 
-        usersDAO.delete(userId);
+        usersRepository.delete(userId);
 
         return noContentResponse(response);
     }

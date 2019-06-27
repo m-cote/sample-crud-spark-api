@@ -11,7 +11,7 @@ import java.util.List;
 
 import static app.config.WebServer.API_URL;
 import static app.config.WebServer.USERS_URL;
-import static app.dao.UserTestData.*;
+import static app.repository.UserTestData.*;
 import static io.restassured.RestAssured.given;
 import static io.restassured.RestAssured.when;
 import static org.assertj.core.api.Assertions.assertThat;

@@ -1,4 +1,4 @@
-package app.dao;
+package app.repository;
 
 import app.model.User;
 
@@ -8,7 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class InMemoryUsersDAOImpl implements UsersDAO {
+public class InMemoryUsersRepositoryImpl implements UsersRepository {
 
     private static AtomicInteger counter = new AtomicInteger(0);
 

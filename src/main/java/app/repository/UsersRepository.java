@@ -1,11 +1,11 @@
-package app.dao;
+package app.repository;
 
 import app.model.User;
 import app.util.exception.NotFoundException;
 
 import java.util.List;
 
-public interface UsersDAO {
+public interface UsersRepository {
 
     List<User> findAll();
 

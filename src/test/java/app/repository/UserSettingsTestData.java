@@ -1,8 +1,8 @@
-package app.dao;
+package app.repository;
 
 import app.model.UserSettings;
 
-import static app.dao.UserTestData.id1;
+import static app.repository.UserTestData.id1;
 
 public class UserSettingsTestData {
 
